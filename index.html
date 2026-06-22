@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Опрос — de.formee</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a18;
+    --paper: #f7f5f0;
+    --warm-mid: #e8e3d8;
+    --accent: #b8a08a;
+    --accent-dark: #8c7560;
+    --muted: #888078;
+    --white: #ffffff;
+    --danger: #c0392b;
+    --success: #4a7c59;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    padding: 48px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba(184,160,138,0.15);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    top: -30px; left: 50%;
+    transform: translateX(-50%);
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    border: 1px solid rgba(184,160,138,0.25);
+  }
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    color: var(--white);
+    position: relative;
+    z-index: 1;
+  }
+  .brand-name span { color: var(--accent); }
+  .header-sub {
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: var(--ink);
+    padding: 0 40px 28px;
+  }
+  .progress-bar-bg {
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    height: 2px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .progress-bar-fill {
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-label {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  /* SECTION */
+  .section {
+    display: none;
+  }
+  .section.active {
+    display: block;
+    animation: fadeSlide 0.35s ease;
+  }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .section-hint {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 36px;
+    font-style: italic;
+  }
+
+  /* QUESTIONS */
+  .question-block {
+    margin-bottom: 32px;
+  }
+  .question-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .question-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  /* TEXT INPUTS */
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--warm-mid);
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--accent);
+  }
+  textarea {
+    min-height: 90px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888078' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+  }
+
+  /* RADIO / CHECKBOX */
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--white);
+    border: 1px solid var(--warm-mid);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+  .option-item:hover {
+    border-color: var(--accent);
+  }
+  .option-item.selected {
+    border-color: var(--accent);
+    background: rgba(184,160,138,0.08);
+  }
+  .option-item input[type="radio"],
+  .option-item input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent-dark);
+    flex-shrink: 0;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+  .option-text {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--warm-mid);
+    margin: 36px 0;
+  }
+
+  /* NOTICE BOX */
+  .notice {
+    background: rgba(184,160,138,0.12);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  /* SCALE */
+  .scale-wrap {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .scale-btn {
+    flex: 1;
+    min-width: 40px;
+    padding: 10px 4px;
+    text-align: center;
+    background: var(--white);
+    border: 1px solid var(--warm-mid);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .scale-btn:hover { border-color: var(--accent); }
+  .scale-btn.selected {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+    color: var(--white);
+  }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 48px;
+    align-items: center;
+  }
+  .btn-next {
+    background: var(--ink);
+    color: var(--white);
+    border: none;
+    padding: 14px 36px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-next:hover { background: var(--accent-dark); }
+  .btn-back {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--warm-mid);
+    padding: 14px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-back:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .btn-skip {
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    padding: 14px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-left: auto;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: transparent;
+  }
+  .btn-skip:hover {
+    color: var(--ink);
+    text-decoration-color: var(--warm-mid);
+  }
+
+  /* ERROR */
+  .error-msg {
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 6px;
+    display: none;
+  }
+
+  /* FINISH SCREEN */
+  #finish-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+  }
+  .finish-circle {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(74,124,89,0.12);
+    margin: 0 auto 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+  }
+  .finish-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+  .finish-text {
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 420px;
+    margin: 0 auto 36px;
+  }
+
+  /* SCREENED OUT */
+  #screened-out {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+  }
+  .screened-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+  .screened-text {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (max-width: 500px) {
+    header { padding: 36px 20px 32px; }
+    .brand-name { font-size: 32px; }
+    main { padding: 40px 16px 80px; }
+    .btn-row { flex-direction: column; }
+    .btn-next, .btn-back { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-name">de<span>.</span>formee</div>
+  <div class="header-sub">Исследование — украшения и стиль</div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">Начало</div>
+</div>
+
+<main id="main-content">
+
+  <!-- ───── СКРИНИНГ ───── -->
+  <div class="section active" data-section="0">
+    <div class="section-tag">Скрининг</div>
+    <div class="section-title">Несколько вводных вопросов</div>
+    <div class="section-hint">Это поможет нам понять контекст.</div>
+
+    <div class="question-block">
+      <label class="question-label">В какой стране вы сейчас живёте?</label>
+      <input type="text" id="q-country" placeholder="Например: Россия, Нидерланды…">
+      <div class="error-msg" id="err-country">Пожалуйста, укажите страну</div>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Сколько вам лет?</label>
+      <input type="number" id="q-age" min="10" max="99" placeholder="Ваш возраст">
+      <div class="error-msg" id="err-age">Пожалуйста, укажите возраст</div>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Покупаете ли вы украшения для себя?</label>
+      <div class="options-list" id="q-buys">
+        <label class="option-item"><input type="radio" name="buys" value="regularly"><span class="option-text">Регулярно</span></label>
+        <label class="option-item"><input type="radio" name="buys" value="sometimes"><span class="option-text">Иногда</span></label>
+        <label class="option-item"><input type="radio" name="buys" value="rarely"><span class="option-text">Редко</span></label>
+        <label class="option-item"><input type="radio" name="buys" value="never"><span class="option-text">Никогда</span></label>
+      </div>
+      <div class="error-msg" id="err-buys">Выберите один вариант</div>
+    </div>
+
+    <div class="question-block" id="block-last-buy">
+      <label class="question-label">Когда вы в последний раз покупали украшение для себя?</label>
+      <input type="text" id="q-last-buy" placeholder="Например: месяц назад, в прошлом году…">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-next" onclick="nextSection(0)">Далее</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 1: Контекст ───── -->
+  <div class="section" data-section="1">
+    <div class="section-tag">Блок 1</div>
+    <div class="section-title">Контекст и образ жизни</div>
+    <div class="section-hint">Расскажите немного о себе — в свободной форме.</div>
+
+    <div class="question-block">
+      <label class="question-label">Чем занимаетесь?</label>
+      <textarea id="q-occupation" placeholder="Профессия, сфера, образ жизни…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Как бы вы описали свой стиль?</label>
+      <textarea id="q-style" placeholder="В нескольких словах или развёрнуто — как вам удобно"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Какую роль украшения играют в вашей жизни?</label>
+      <textarea id="q-role" placeholder="Носите каждый день? По особым случаям? Коллекционируете?"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Почему вообще носите украшения? Что за этим стоит?</label>
+      <div class="question-note">Способ самовыражения? Просто красиво? Что-то другое?</div>
+      <textarea id="q-why-wear" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(1)">Назад</button>
+      <button class="btn-next" onclick="nextSection(1)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(1)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 2: Последняя покупка ───── -->
+  <div class="section" data-section="2">
+    <div class="section-tag">Блок 2</div>
+    <div class="section-title">Последняя покупка</div>
+    <div class="section-hint">Вспомним последнее украшение, которое вы купили для себя.</div>
+
+    <div class="question-block">
+      <label class="question-label">Что это было?</label>
+      <textarea id="q-last-item" placeholder="Кольцо, серьги, подвеска… опишите его"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Где вы его нашли?</label>
+      <input type="text" id="q-where-found" placeholder="Магазин, сайт, соцсети, случайно…">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что именно вас привлекло?</label>
+      <textarea id="q-attracted" placeholder="Дизайн, материал, цена, что-то другое?"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Как вы принимали решение о покупке?</label>
+      <textarea id="q-decision" placeholder="Долго думали или купили сразу? Сравнивали варианты?"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(2)">Назад</button>
+      <button class="btn-next" onclick="nextSection(2)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(2)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 3: Что важно ───── -->
+  <div class="section" data-section="3">
+    <div class="section-tag">Блок 3</div>
+    <div class="section-title">Что важно при выборе</div>
+
+    <div class="question-block">
+      <label class="question-label">Когда выбираете украшение, на что обращаете внимание в первую очередь?</label>
+      <textarea id="q-first-attention" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Почему именно на это?</label>
+      <textarea id="q-why-that" placeholder="Расскажите подробнее…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что для вас «классное украшение»?</label>
+      <textarea id="q-cool-jewelry" placeholder="Ваше определение…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Насколько важен бренд при выборе?</label>
+      <div class="scale-wrap" id="scale-brand">
+        <div class="scale-btn" onclick="selectScale('scale-brand',this,'1')">1</div>
+        <div class="scale-btn" onclick="selectScale('scale-brand',this,'2')">2</div>
+        <div class="scale-btn" onclick="selectScale('scale-brand',this,'3')">3</div>
+        <div class="scale-btn" onclick="selectScale('scale-brand',this,'4')">4</div>
+        <div class="scale-btn" onclick="selectScale('scale-brand',this,'5')">5</div>
+      </div>
+      <div class="scale-labels"><span>Совсем не важен</span><span>Очень важен</span></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(3)">Назад</button>
+      <button class="btn-next" onclick="nextSection(3)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(3)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 4: Бренд или дизайн ───── -->
+  <div class="section" data-section="4">
+    <div class="section-tag">Блок 4</div>
+    <div class="section-title">Бренд или дизайн?</div>
+    <div class="notice">Вспомните или представьте ситуацию, когда вам понравилось украшение неизвестного бренда.</div>
+
+    <div class="question-block">
+      <label class="question-label">Что заставило обратить на него внимание?</label>
+      <textarea id="q-unknown-attention" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Покупали ли вы украшения брендов, о которых раньше ничего не знали?</label>
+      <div class="options-list" id="q-unknown-brand-buy">
+        <label class="option-item"><input type="radio" name="unknown-brand-buy" value="yes"><span class="option-text">Да</span></label>
+        <label class="option-item"><input type="radio" name="unknown-brand-buy" value="no"><span class="option-text">Нет</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Почему (купили или не купили)?</label>
+      <textarea id="q-unknown-why" placeholder="Что повлияло на решение?"></textarea>
+    </div>
+
+    <hr class="divider">
+
+    <div class="notice">Представьте два украшения одинакового качества:<br><br>
+      <strong>Первое</strong> — известного бренда с довольно простым дизайном.<br>
+      <strong>Второе</strong> — неизвестного бренда с необычным дизайном.
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Какое бы вы выбрали?</label>
+      <div class="options-list" id="q-which-choose">
+        <label class="option-item"><input type="radio" name="which-choose" value="known"><span class="option-text">Первое — известный бренд, простой дизайн</span></label>
+        <label class="option-item"><input type="radio" name="which-choose" value="unknown"><span class="option-text">Второе — неизвестный бренд, необычный дизайн</span></label>
+        <label class="option-item"><input type="radio" name="which-choose" value="depends"><span class="option-text">Зависит от ситуации</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Почему именно этот выбор?</label>
+      <textarea id="q-choose-why" placeholder="Поделитесь своими мыслями…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(4)">Назад</button>
+      <button class="btn-next" onclick="nextSection(4)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(4)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 5: Самовыражение ───── -->
+  <div class="section" data-section="5">
+    <div class="section-tag">Блок 5</div>
+    <div class="section-title">Украшения и самовыражение</div>
+
+    <div class="question-block">
+      <label class="question-label">Как вы думаете, могут ли украшения что-то рассказывать о человеке?</label>
+      <textarea id="q-self-express" placeholder="Ваши мысли…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что ваши украшения говорят о вас?</label>
+      <textarea id="q-about-you" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Есть ли украшение, которое отражает ваш характер? Расскажите о нём.</label>
+      <textarea id="q-personal-piece" placeholder="Опишите его и почему оно особенное…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(5)">Назад</button>
+      <button class="btn-next" onclick="nextSection(5)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(5)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 6: Цена и ценность ───── -->
+  <div class="section" data-section="6">
+    <div class="section-tag">Блок 6</div>
+    <div class="section-title">Цена и ценность</div>
+
+    <div class="question-block">
+      <label class="question-label">Расскажите про самое дорогое украшение, которое вы покупали для себя.</label>
+      <textarea id="q-expensive" placeholder="Что это было? Где купили?"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Почему решили потратить такую сумму?</label>
+      <textarea id="q-why-expensive" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Как вы понимаете, что украшение стоит своих денег?</label>
+      <textarea id="q-worth" placeholder="По каким признакам?"></textarea>
+    </div>
+
+    <hr class="divider">
+
+    <div class="question-block">
+      <label class="question-label">Что для вас считается дорогим украшением? (сумма или ощущение)</label>
+      <input type="text" id="q-what-expensive" placeholder="Ваш ответ…">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что кажется подозрительно дешёвым?</label>
+      <input type="text" id="q-suspiciously-cheap" placeholder="Ваш ответ…">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">За что готовы переплачивать?</label>
+      <textarea id="q-overpay" placeholder="Материал, дизайн, бренд, история?"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">За что никогда не готовы платить?</label>
+      <textarea id="q-never-pay" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(6)">Назад</button>
+      <button class="btn-next" onclick="nextSection(6)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(6)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 7: Бренды ───── -->
+  <div class="section" data-section="7">
+    <div class="section-tag">Блок 7</div>
+    <div class="section-title">Отношение к брендам украшений</div>
+
+    <div class="question-block">
+      <label class="question-label">Какие бренды украшений вам нравятся?</label>
+      <textarea id="q-fav-brands" placeholder="Перечислите любые — известные или нет"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Почему именно они?</label>
+      <textarea id="q-why-fav" placeholder="Что в них привлекает?"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что делает бренд интересным лично для вас?</label>
+      <textarea id="q-brand-interesting" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <hr class="divider">
+
+    <div class="question-block">
+      <label class="question-label">Какие бренды кажутся переоценёнными?</label>
+      <input type="text" id="q-overrated" placeholder="Ваш ответ…">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Какие бренды вызывают доверие?</label>
+      <input type="text" id="q-trusted" placeholder="Ваш ответ…">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Есть ли любимые независимые или дизайнерские бренды?</label>
+      <textarea id="q-indie-brands" placeholder="Небольшие студии, независимые дизайнеры…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(7)">Назад</button>
+      <button class="btn-next" onclick="nextSection(7)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(7)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 8: Тест de.formee ───── -->
+  <div class="section" data-section="8">
+    <div class="section-tag">Блок 8</div>
+    <div class="section-title">Тест бренда de.formee</div>
+    <div class="notice">На этом этапе интервьюер показывает фотографии бренда. Ответьте на вопросы после просмотра.</div>
+
+    <div class="question-block">
+      <label class="question-label">Первое впечатление?</label>
+      <textarea id="q-first-impression" placeholder="Без раздумий — что первое пришло в голову?"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Какие эмоции вызывает бренд?</label>
+      <textarea id="q-emotions" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Каким людям он подойдёт? Какой человек носит такие украшения?</label>
+      <textarea id="q-target-person" placeholder="Опишите образ, образ жизни, характер…"></textarea>
+    </div>
+
+    <hr class="divider">
+
+    <div class="question-block">
+      <label class="question-label">Что нравится в этом бренде?</label>
+      <textarea id="q-likes" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что не нравится?</label>
+      <textarea id="q-dislikes" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что кажется необычным?</label>
+      <textarea id="q-unusual" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что вызывает сомнения?</label>
+      <textarea id="q-doubts" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(8)">Назад</button>
+      <button class="btn-next" onclick="nextSection(8)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(8)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── БЛОК 9: Проверка покупки ───── -->
+  <div class="section" data-section="9">
+    <div class="section-tag">Блок 9</div>
+    <div class="section-title">Проверка покупки</div>
+    <div class="notice">Представьте, что вы увидели de.formee в своём городе или в онлайн-магазине.</div>
+
+    <div class="question-block">
+      <label class="question-label">Рассмотрели бы покупку?</label>
+      <div class="options-list" id="q-would-buy">
+        <label class="option-item"><input type="radio" name="would-buy" value="yes"><span class="option-text">Да, скорее всего</span></label>
+        <label class="option-item"><input type="radio" name="would-buy" value="maybe"><span class="option-text">Возможно</span></label>
+        <label class="option-item"><input type="radio" name="would-buy" value="no"><span class="option-text">Вряд ли</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Почему?</label>
+      <textarea id="q-buy-why" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Какую цену ожидали бы увидеть?</label>
+      <input type="text" id="q-expected-price" placeholder="Диапазон или конкретная сумма…">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что должно произойти, чтобы вы точно купили украшение этого бренда?</label>
+      <textarea id="q-what-to-buy" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Что могло бы вас остановить?</label>
+      <textarea id="q-what-stops" placeholder="Ваш ответ…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(9)">Назад</button>
+      <button class="btn-next" onclick="nextSection(9)">Далее</button>
+      <button class="btn-skip" onclick="skipSection(9)">Пропустить</button>
+    </div>
+  </div>
+
+  <!-- ───── ФИНАЛ ───── -->
+  <div class="section" data-section="10">
+    <div class="section-tag">Финальный вопрос</div>
+    <div class="section-title">Идеальное украшение</div>
+    <div class="section-hint">Последний вопрос — и самый главный.</div>
+
+    <div class="question-block">
+      <label class="question-label">Если бы вам нужно было описать идеальное украшение одной фразой, какой бы она была?</label>
+      <textarea id="q-ideal" placeholder="Ваша фраза…" style="min-height:120px;"></textarea>
+      <div class="error-msg" id="err-ideal">Пожалуйста, ответьте на этот вопрос</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="prevSection(10)">Назад</button>
+      <button class="btn-next" onclick="submitSurvey()">Завершить опрос</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- SCREENED OUT -->
+<div id="screened-out" style="max-width:500px;margin:0 auto;">
+  <div class="screened-title">Спасибо за участие</div>
+  <div class="screened-text">К сожалению, этот опрос предназначен для людей, которые покупают украшения. Мы ценим ваше время!</div>
+</div>
+
+<!-- FINISH -->
+<div id="finish-screen" style="max-width:500px;margin:0 auto;">
+  <div class="finish-circle">✦</div>
+  <div class="finish-title">Спасибо!</div>
+  <div class="finish-text">Ваши ответы помогут нам лучше понять, что делает украшение особенным. Это очень ценно для de.formee.</div>
+</div>
+
+<script>
+  const TOTAL_SECTIONS = 11; // 0–10
+  let currentSection = 0;
+  const scaleValues = {};
+
+  function updateProgress(section) {
+    const pct = Math.round((section / (TOTAL_SECTIONS - 1)) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    const labels = ['Скрининг','Блок 1','Блок 2','Блок 3','Блок 4','Блок 5','Блок 6','Блок 7','Блок 8','Блок 9','Финал'];
+    document.getElementById('progressLabel').textContent = labels[section] || '';
+  }
+
+  function showSection(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const target = document.querySelector(`[data-section="${n}"]`);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    updateProgress(n);
+    currentSection = n;
+  }
+
+  // Radio/checkbox option highlight
+  document.querySelectorAll('.option-item input').forEach(inp => {
+    inp.addEventListener('change', function() {
+      const name = this.name;
+      document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+        r.closest('.option-item').classList.remove('selected');
+      });
+      this.closest('.option-item').classList.add('selected');
+    });
+  });
+
+  function selectScale(groupId, el, val) {
+    document.querySelectorAll(`#${groupId} .scale-btn`).forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    scaleValues[groupId] = val;
+  }
+
+  function getRadio(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : null;
+  }
+
+  function showErr(id, show) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = show ? 'block' : 'none';
+  }
+
+  function nextSection(from) {
+    // VALIDATION per section
+    if (from === 0) {
+      const country = document.getElementById('q-country').value.trim();
+      const age = document.getElementById('q-age').value.trim();
+      const buys = getRadio('buys');
+      let ok = true;
+      showErr('err-country', !country); if (!country) ok = false;
+      showErr('err-age', !age); if (!age) ok = false;
+      showErr('err-buys', !buys); if (!buys) ok = false;
+      if (!ok) return;
+      // Screen out if never
+      if (buys === 'never') {
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('screened-out').style.display = 'block';
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('progressLabel').textContent = 'Завершено';
+        return;
+      }
+    }
+
+    if (from === 10) { submitSurvey(); return; }
+
+    showSection(from + 1);
+  }
+
+  function prevSection(from) {
+    if (from > 0) showSection(from - 1);
+  }
+
+  function skipSection(from) {
+    if (from < 10) showSection(from + 1);
+  }
+
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyGaK8MeblV8hDSQqdxBRNzYV0j2MNCCK1LvQ7X3U0slp4mQCUwm1MUmgdZJD0oPz1GrA/exec';
+
+  function collectData() {
+    const val = id => (document.getElementById(id) || {}).value?.trim() || '';
+    const radio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+    const checkboxes = name => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value).join(', ');
+
+    return {
+      // Мета
+      'Дата и время':        new Date().toLocaleString('ru-RU'),
+
+      // Блок 0 — Скрининг
+      'Страна':              val('q-country'),
+      'Возраст':             val('q-age'),
+      'Частота покупок':     radio('buys'),
+      'Последняя покупка':   val('q-last-buy'),
+
+      // Блок 1 — Контекст
+      'Чем занимается':      val('q-occupation'),
+      'Стиль':               val('q-style'),
+      'Роль украшений':      val('q-role'),
+      'Почему носит':        val('q-why-wear'),
+
+      // Блок 2 — Последняя покупка
+      'Что купили':          val('q-last-item'),
+      'Где нашли':           val('q-where-found'),
+      'Что привлекло':       val('q-attracted'),
+      'Как решали':          val('q-decision'),
+
+      // Блок 3 — Что важно
+      'На что смотрит':      val('q-first-attention'),
+      'Почему на это':       val('q-why-that'),
+      'Классное украшение':  val('q-cool-jewelry'),
+      'Важность бренда (1-5)': scaleValues['scale-brand'] || '',
+
+      // Блок 4 — Бренд или дизайн
+      'Внимание к неизвестному': val('q-unknown-attention'),
+      'Покупал неизвестный бренд': radio('unknown-brand-buy'),
+      'Почему да/нет':       val('q-unknown-why'),
+      'Выбор бренд/дизайн':  radio('which-choose'),
+      'Почему такой выбор':  val('q-choose-why'),
+
+      // Блок 5 — Самовыражение
+      'Украшения о человеке': val('q-self-express'),
+      'Что говорят о нём':   val('q-about-you'),
+      'Особенное украшение': val('q-personal-piece'),
+
+      // Блок 6 — Цена
+      'Дорогая покупка':     val('q-expensive'),
+      'Почему потратил':     val('q-why-expensive'),
+      'Стоит ли денег':      val('q-worth'),
+      'Что считает дорогим': val('q-what-expensive'),
+      'Подозрительно дёшево': val('q-suspiciously-cheap'),
+      'За что переплачивает': val('q-overpay'),
+      'За что не платит':    val('q-never-pay'),
+
+      // Блок 7 — Бренды
+      'Любимые бренды':      val('q-fav-brands'),
+      'Почему они':          val('q-why-fav'),
+      'Интересный бренд':    val('q-brand-interesting'),
+      'Переоценённые':       val('q-overrated'),
+      'Вызывают доверие':    val('q-trusted'),
+      'Независимые бренды':  val('q-indie-brands'),
+
+      // Блок 8 — Тест de.formee
+      'Первое впечатление':  val('q-first-impression'),
+      'Эмоции от бренда':    val('q-emotions'),
+      'Кому подойдёт':       val('q-target-person'),
+      'Что нравится':        val('q-likes'),
+      'Что не нравится':     val('q-dislikes'),
+      'Что необычно':        val('q-unusual'),
+      'Сомнения':            val('q-doubts'),
+
+      // Блок 9 — Покупка
+      'Рассмотрит покупку':  radio('would-buy'),
+      'Почему купит/нет':    val('q-buy-why'),
+      'Ожидаемая цена':      val('q-expected-price'),
+      'Что нужно для покупки': val('q-what-to-buy'),
+      'Что остановит':       val('q-what-stops'),
+
+      // Финал
+      'Идеальное украшение': val('q-ideal'),
+    };
+  }
+
+  function submitSurvey() {
+    const ideal = document.getElementById('q-ideal').value.trim();
+    showErr('err-ideal', !ideal);
+    if (!ideal) return;
+
+    // Показываем экран завершения сразу, не ждём ответа от сервера
+    document.getElementById('main-content').style.display = 'none';
+    document.getElementById('finish-screen').style.display = 'block';
+    document.getElementById('progressBar').style.width = '100%';
+    document.getElementById('progressLabel').textContent = 'Завершено';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Отправляем данные в Google Sheets
+    const data = collectData();
+    fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors', // нужно для Google Apps Script
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(err => console.warn('Ошибка отправки:', err));
+  }
+
+  // Init
+  updateProgress(0);
+</script>
+</body>
+</html>
